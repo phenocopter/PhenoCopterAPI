@@ -69,3 +69,26 @@ get_flight_image <- function(id) {
 
 
 
+
+#' Get layers for a flight
+#'
+#' @param id The flight id
+#'
+#' @return A list with layers information
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' pc_login()
+#' get_flight_image(1)
+#' }
+get_flight_layer <- function(id, isMosaic = FALSE) {
+    .check_id(id)
+    response <- request(httr::GET, paste0('flight/', id, '/layers?isMosaic=', isMosaic))
+    httr::stop_for_status(response)
+    response <- httr::content(response)
+    response
+}
+
+
+

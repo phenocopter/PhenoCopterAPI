@@ -34,6 +34,27 @@ get_flight_workflows <- function(workflowId = NULL, workflowName = "",
 
 
 
+#' Get workflow for a flight
+#'
+#' @param flight Flight id
+#' @return A list with workflow information
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' pc_login()
+#' get_flight_workflow(1)
+#' }
+get_flight_workflow <- function(flight) {
+    
+    response <- request(httr::GET, paste0('flight/', flight, '/workflow'))
+    httr::stop_for_status(response)
+    response <- httr::content(response)
+    response
+}
+
+
+
 
 #' PUT workflow for a flight
 #'
