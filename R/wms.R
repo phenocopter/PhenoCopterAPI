@@ -8,7 +8,7 @@
 #'
 #' @examples
 get_flight_wms <- function(flight) {
-    .check_id(id)
+    .check_id(flight)
     response <- request(httr::GET, paste0('flight/', flight, '/wms'))
     httr::stop_for_status(response)
     response <- httr::content(response)
