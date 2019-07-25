@@ -24,7 +24,7 @@ get_flight_image <- function(flight) {
 }
 
 
-add_flight_path <- function(flight, data, overwrite = FALSE) {
+add_flight_image <- function(flight, data, overwrite = FALSE) {
     .check_id(flight)
     images <- get_flight_image(flight)
     if (length(images) > 0 & overwrite == FALSE) {
