@@ -47,27 +47,6 @@ get_flight_gcp <- function(id) {
 }
 
 
-#' Get images for a flight
-#'
-#' @param id The flight id
-#'
-#' @return A list with images information
-#' @export
-#'
-#' @examples
-#' \dontrun{
-#' pc_login()
-#' get_flight_image(1)
-#' }
-get_flight_image <- function(id) {
-    .check_id(id)
-    response <- request(httr::GET, paste0('flight/', id, '/images'))
-    httr::stop_for_status(response)
-    response <- httr::content(response)
-    response
-}
-
-
 
 
 #' Get layers for a flight
