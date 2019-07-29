@@ -69,7 +69,8 @@ add_flight_path <- function(flight, data, overwrite = FALSE) {
     new <- data %>%
         mutate(datetimeOriginal = format(datetimeOriginal, format = '%Y-%m-%dT%H:%M:%S%z')) %>%
         group_by(flightId, latitude, longitude, elevation, width, height, datetimeOriginal) %>%
-        do(generate_file(.))
+        do(generate_file(.)) %>%
+        arrange(datetimeOriginal)
 
     response <- request(httr::POST, paste0('flight/', flight, '/images'),
                         body = jsonlite::toJSON(new, auto_unbox = TRUE,
