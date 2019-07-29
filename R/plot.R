@@ -19,6 +19,21 @@ get_plot_segmentation <- function(flight) {
 
 
 
+
+post_plot_segmentation_image <- function(fight, data) {
+    .check_id(flight)
+
+    response <- request(httr::POST, paste0('flight/', flight, '/plot/segmentation/images'),
+                        body = jsonlite::toJSON(data, auto_unbox = TRUE,
+                                                null = 'null'),
+                        config = httr::content_type('application/json'))
+    httr::stop_for_status(response)
+    response <- httr::content(response)
+    response
+}
+
+
+
 #' Get plot phenotype
 #'
 #' @param flight Flight id
@@ -27,8 +42,13 @@ get_plot_segmentation <- function(flight) {
 #' @export
 #'
 #' @examples
-get_plot_phenotypes <- function(flight) {
-    response <- request(httr::GET, paste0('flight/', flight, '/plot/phenotypes'))
+get_plot_phenotypes <- function(flight, function_id = NULL) {
+    query = list()
+    if (!is.null(function_id)) {
+        query[['function']] <- function_id
+    }
+    response <- request(httr::GET, paste0('flight/', flight, '/plot/phenotypes'),
+                        query = query)
     httr::stop_for_status(response)
     response <- httr::content(response)
     response
@@ -47,40 +67,35 @@ get_plot_phenotypes <- function(flight) {
 add_plot_phenotypes <- function(flight, data) {
     .check_id(flight)
 
-    # wms_exist <- get_flight_wms(flight)
-    # layers <- get_flight_layer(flight)
-    # vi_id <- NULL
-    # for (i in seq(along = layers)) {
-    #     if (tolower(layers[[i]]$name) == tolower(name)) {
-    #         vi_id <- layers[[i]]$id
-    #         break;
-    #     }
-    # }
-    # if (is.null(vi_id)) {
-    #     stop(paste0('Vegetation Index ', name, ' is not found'))
-    # }
-    # url <- paste0('flight/', flight, '/wms')
-    # wms <- list(flightId = flight, vegetationIndexId = vi_id,
-    #             value = value,
-    #             hide = hide,
-    #             min = min,
-    #             max = max)
-    # # Check whether name is existing
-    # method <- httr::POST
-    # for (i in seq(along = wms_exist)) {
-    #     if (tolower(wms_exist[[i]]$vegetationIndex$name) == tolower(name)) {
-    #         method <- httr::PUT
-    #         url <- paste0(url, '/', wms_exist[[i]]$id)
-    #         wms$id <- wms_exist[[i]]$id
-    #         break
-    #     }
-    # }
-    #
-    # response <- request(method, url,
-    #                     body = jsonlite::toJSON(wms, auto_unbox = TRUE,
-    #                                             null = 'null'),
-    #                     config = httr::content_type('application/json'))
-    # httr::stop_for_status(response)
-    # response <- httr::content(response)
-    # response
+    url <- paste0('flight/', flight, '/plot/phenotypes')
+    response <- request(httr::POST, url,
+                        body = jsonlite::toJSON(data, auto_unbox = TRUE,
+                                                null = 'null'),
+                        config = httr::content_type('application/json'))
+    httr::stop_for_status(response)
+    response <- httr::content(response)
+    response
 }
+
+
+#' Delete plot phenotype
+#'
+#' @param flight Flight id
+#' @param function_id Flight function id
+#'
+#' @return
+#' @export
+#'
+#' @examples
+delete_plot_phenotypes <- function(flight, function_id = NULL) {
+    query = list()
+    if (!is.null(function_id)) {
+        query[['function']] <- function_id
+    }
+    response <- request(httr::DELETE, paste0('flight/', flight, '/plot/phenotypes'),
+                        query = query)
+    httr::stop_for_status(response)
+    response <- httr::content(response)
+    response
+}
+

@@ -68,8 +68,6 @@ get_flight_image <- function(id) {
 }
 
 
-
-
 #' Get layers for a flight
 #'
 #' @param id The flight id
