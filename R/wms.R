@@ -15,9 +15,9 @@ get_flight_wms <- function(flight) {
     response
 }
 
-#' Add a WMS layer for a flight 
+#' Add a WMS layer for a flight
 #'
-#' @param flight Flight ID 
+#' @param flight Flight ID
 #' @param name Name of vegetation index (case in-sensitive)
 #' @param value Layer name of GeoServer
 #' @param min Min value of layer (null in default)
@@ -26,9 +26,9 @@ get_flight_wms <- function(flight) {
 #'
 #' @return
 #' @export
-add_flight_wms <- function(flight, name, value, min = NULL, max = NULL, hide = 1) {
+add_flight_wms <- function(flight, name, value, min = NULL, max = NULL, hide = TRUE) {
     .check_id(flight)
-    
+
     wms_exist <- get_flight_wms(flight)
     layers <- get_flight_layer(flight)
     vi_id <- NULL
@@ -43,9 +43,9 @@ add_flight_wms <- function(flight, name, value, min = NULL, max = NULL, hide = 1
     }
     url <- paste0('flight/', flight, '/wms')
     wms <- list(flightId = flight, vegetationIndexId = vi_id,
-                value = value, 
-                hide = hide, 
-                min = min, 
+                value = value,
+                hide = hide,
+                min = min,
                 max = max)
     # Check whether name is existing
     method <- httr::POST
@@ -57,7 +57,7 @@ add_flight_wms <- function(flight, name, value, min = NULL, max = NULL, hide = 1
             break
         }
     }
-    
+
     response <- request(method, url,
                         body = jsonlite::toJSON(wms, auto_unbox = TRUE,
                                                 null = 'null'),
