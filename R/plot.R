@@ -20,7 +20,7 @@ get_plot_segmentation <- function(flight) {
 
 
 
-post_plot_segmentation_image <- function(fight, data) {
+post_plot_segmentation_image <- function(flight, data) {
     .check_id(flight)
 
     response <- request(httr::POST, paste0('flight/', flight, '/plot/segmentation/images'),
