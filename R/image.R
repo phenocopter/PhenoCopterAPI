@@ -66,18 +66,28 @@ add_flight_image <- function(flight, data, overwrite = FALSE) {
                                  select(original, band))
         res
     }
+    if (!has_name(data, 'enable')) {
+        data$enable = 1;
+    }
     new <- data %>%
         mutate(datetimeOriginal = format(datetimeOriginal, format = '%Y-%m-%dT%H:%M:%S%z')) %>%
         group_by(flightId, latitude, longitude, elevation, width, height, datetimeOriginal) %>%
         do(generate_file(.)) %>%
         arrange(datetimeOriginal)
-
     response <- request(httr::POST, paste0('flight/', flight, '/images'),
-                        body = jsonlite::toJSON(new, auto_unbox = TRUE,
-                                                null = 'null'),
+                            body = jsonlite::toJSON(new, auto_unbox = TRUE,
+                                                    null = 'null', digits = 20),
                         config = httr::content_type('application/json'))
     httr::stop_for_status(response)
     response <- httr::content(response)
     response
 
+}
+
+delete_flight_image <- function(flight) {
+    .check_id(flight)
+    response <- request(httr::DELETE, paste0('flight/', flight, '/images'))
+    httr::stop_for_status(response)
+    response <- httr::content(response)
+    response
 }
