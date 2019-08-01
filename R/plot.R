@@ -27,10 +27,27 @@ post_plot_segmentation_image <- function(flight, data) {
                         body = jsonlite::toJSON(data, auto_unbox = TRUE,
                                                 null = 'null'),
                         config = httr::content_type('application/json'))
-    httr::stop_for_status(response)
-    response <- httr::content(response)
-    response
+    r <- httr::content(response)
+    if (is.null(response$status_code) || !(response$status_code %in% c(200, 201))) {
+        stop(r)
+    }
+    r
 }
+
+delete_plot_segmentation_image <- function(flight) {
+    .check_id(flight)
+
+    response <- request(httr::DELETE, paste0('flight/', flight, '/plot/segmentation/images'),
+                        body = jsonlite::toJSON(data, auto_unbox = TRUE,
+                                                null = 'null'),
+                        config = httr::content_type('application/json'))
+    r <- httr::content(response)
+    if (is.null(response$status_code) || !(response$status_code %in% c(200, 201))) {
+        stop(r)
+    }
+    r
+}
+
 
 
 
