@@ -1,6 +1,16 @@
 # API related with plots
 
 
+get_plot <- function(flight) {
+    response <- request(httr::GET, paste0('flight/', flight, '/plots'))
+    httr::stop_for_status(response)
+    response <- httr::content(response)
+    map_df(response, as_tibble) %>%
+        arrange(column, row)
+}
+
+
+
 #' Get plot segmentaion
 #'
 #' @param flight Flight ID
