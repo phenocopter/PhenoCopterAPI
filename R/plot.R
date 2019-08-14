@@ -91,16 +91,18 @@ get_plot_phenotypes <- function(flight, function_id = NULL) {
 #' @export
 #'
 #' @examples
-add_plot_phenotypes <- function(flight, data) {
+add_plot_phenotypes <- function(flight, fun, data) {
     .check_id(flight)
 
-    url <- paste0('flight/', flight, '/plot/phenotypes')
+    url <- paste0('flight/', flight, '/fun/', fun, '/phenotypes')
+    system.time({
     response <- request(httr::POST, url,
                         body = jsonlite::toJSON(data, auto_unbox = TRUE,
                                                 null = 'null'),
                         config = httr::content_type('application/json'))
     httr::stop_for_status(response)
     response <- httr::content(response)
+    })
     response
 }
 
