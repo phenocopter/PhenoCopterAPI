@@ -20,7 +20,7 @@
 #' }
 get_flight_workflows <- function(workflowId = NULL, workflowName = "",
                                  statusId = NULL, statusName = "") {
-    
+
     response <- request(httr::GET, 'flight/workflows',
                         query = list(workflowId = workflowId,
                                      workflowName = workflowName,
@@ -45,9 +45,14 @@ get_flight_workflows <- function(workflowId = NULL, workflowName = "",
 #' pc_login()
 #' get_flight_workflow(1)
 #' }
-get_flight_workflow <- function(flight) {
-    
-    response <- request(httr::GET, paste0('flight/', flight, '/workflow'))
+get_flight_workflow <- function(flight, id = NULL) {
+
+    url <- paste0('flight/', flight, '/workflow')
+    if (!is.null(id)) {
+        url <- paste0(url, '/', id)
+    }
+
+    response <- request(httr::GET, url)
     httr::stop_for_status(response)
     response <- httr::content(response)
     response
@@ -71,7 +76,7 @@ get_flight_workflow <- function(flight) {
 #' put_flight_workflow(flight = 1, id = 1, workflow = list(id = 1, workflowId = 1, statusId = 1))
 #' }
 put_flight_workflow <- function(flight, id, workflow) {
-    
+
     response <- request(httr::PUT, paste0('flight/', flight, '/workflow/', id),
                         body = jsonlite::toJSON(workflow, auto_unbox = TRUE,
                                                 null = 'null'),
