@@ -45,11 +45,14 @@ get_flight_workflows <- function(workflowId = NULL, workflowName = "",
 #' pc_login()
 #' get_flight_workflow(1)
 #' }
-get_flight_workflow <- function(flight, id = NULL) {
+get_flight_workflow <- function(flight, workflow = NULL, fun = NULL) {
 
     url <- paste0('flight/', flight, '/workflow')
-    if (!is.null(id)) {
-        url <- paste0(url, '/', id)
+    if (!is.null(workflow)) {
+        url <- paste0(url, '/', workflow)
+        if (!is.null(fun)) {
+            url <- paste0(url, '?fun=', fun)
+        }
     }
 
     response <- request(httr::GET, url)
@@ -86,3 +89,21 @@ put_flight_workflow <- function(flight, id, workflow) {
     response
 }
 
+
+
+
+
+post_flight_log <- function(flight, workflow, data) {
+    .check_id(flight)
+
+    response <- request(httr::POST,
+                        paste0('flight/', flight, '/workflow/', workflow, '/log'),
+                        body = jsonlite::toJSON(data, auto_unbox = TRUE,
+                                                null = 'null'),
+                        config = httr::content_type('application/json'))
+    r <- httr::content(response)
+    if (is.null(response$status_code) || !(response$status_code %in% c(200, 201))) {
+        stop(r)
+    }
+    r
+}
