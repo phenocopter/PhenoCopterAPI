@@ -28,7 +28,8 @@ add_flight_image <- function(flight, data, overwrite = FALSE) {
     .check_id(flight)
     images <- get_flight_image(flight)
     if (length(images) > 0 & overwrite == FALSE) {
-        stop('Image information already stored into database. Use overwrite = TRUE to overwrite them')
+        warning('Image information already stored into database. The database is not overwrote.')
+		return;
     }
     if (overwrite == TRUE) {
         stop("Not implemented overwrite = TRUE.")
