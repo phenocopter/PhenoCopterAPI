@@ -21,7 +21,7 @@ get_flight_image <- function(flight, image = NULL) {
     if (!is.null(image)) {
         url <- paste0('flight/', flight, '/image/', image)
     }
-    response <- request(httr::GET, paste0('flight/', flight, '/images'))
+    response <- request(httr::GET, url)
     httr::stop_for_status(response)
     response <- httr::content(response)
     response
