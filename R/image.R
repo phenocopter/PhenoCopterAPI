@@ -15,9 +15,13 @@
 #' pc_login()
 #' get_flight_image(1)
 #' }
-get_flight_image <- function(flight) {
+get_flight_image <- function(flight, image = NULL) {
     .check_id(flight)
-    response <- request(httr::GET, paste0('flight/', flight, '/images'))
+    url <- paste0('flight/', flight, '/images')
+    if (!is.null(image)) {
+        url <- paste0('flight/', flight, '/image/', image)
+    }
+    response <- request(httr::GET, url)
     httr::stop_for_status(response)
     response <- httr::content(response)
     response
