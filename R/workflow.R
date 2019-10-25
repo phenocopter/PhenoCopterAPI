@@ -93,6 +93,14 @@ put_flight_workflow <- function(flight, id, workflow) {
 
 
 
+#' Add new flight log
+#'
+#' @param flight Flight id
+#' @param workflow workflow id
+#' @param data a list of message
+#'
+#' @return
+#' @export
 post_flight_log <- function(flight, workflow, data) {
     .check_id(flight)
 
@@ -100,6 +108,30 @@ post_flight_log <- function(flight, workflow, data) {
                         paste0('flight/', flight, '/workflow/', workflow, '/log'),
                         body = jsonlite::toJSON(data, auto_unbox = TRUE,
                                                 null = 'null'),
+                        config = httr::content_type('application/json'))
+    r <- httr::content(response)
+    if (is.null(response$status_code) || !(response$status_code %in% c(200, 201))) {
+        stop(r)
+    }
+    r
+}
+
+
+#' Delete flight log
+#'
+#' @param flight Flight id
+#' @param workflow workflow id
+#'
+#' @return
+#' @export
+delete_flight_log <- function(flight, workflow, fun = NULL) {
+    .check_id(flight)
+    url <- paste0('flight/', flight, '/workflow/', workflow, '/log')
+    if (!is.null(fun)) {
+        url <- paste0(url, '?fun=', fun)
+    }
+    response <- request(httr::DELETE,
+                        url,
                         config = httr::content_type('application/json'))
     r <- httr::content(response)
     if (is.null(response$status_code) || !(response$status_code %in% c(200, 201))) {
