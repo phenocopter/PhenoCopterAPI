@@ -13,6 +13,8 @@ phenocopter <- function() {
 pc_login <- function(host = PC_OPTIONS('host'),
                      email = PC_OPTIONS('email'),
                      password = PC_OPTIONS('password')) {
+    # Update options
+    pc_options(host = host, email = email, password = password)
     body <- list(Email = email,
                  Password = password,
                  RememberMe = "true")
@@ -22,8 +24,7 @@ pc_login <- function(host = PC_OPTIONS('host'),
     if (r$status_code != 200) {
         stop('Wrong user name or password.')
     }
-    # Update options
-    pc_options(host = host, email = email, password = password)
+
 }
 #' Logout PhenoCopter API
 pc_logout <- function() {
