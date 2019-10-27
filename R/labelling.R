@@ -15,7 +15,7 @@
 get_labelling <- function(id) {
     .check_id(id)
     response <- request(httr::GET, paste0('flight/', id, '/labelling'))
-    httr::stop_for_status(response)
+    .stop_for_status(response)
     response <- httr::content(response)
     response
 }
@@ -35,7 +35,7 @@ get_labelling <- function(id) {
 get_labelling_image <- function(flight) {
     .check_id(flight)
     response <- request(httr::GET, paste0('flight/', flight, '/labelling/image'))
-    httr::stop_for_status(response)
+    .stop_for_status(response)
     response <- httr::content(response)
     response
 }

@@ -19,7 +19,7 @@
 get_flight <- function(id) {
     .check_id(id)
     response <- request(httr::GET, paste0('flight/', id))
-    httr::stop_for_status(response)
+    .stop_for_status(response)
     response <- httr::content(response)
     response
 }
@@ -41,7 +41,7 @@ get_flight <- function(id) {
 get_flight_gcp <- function(id) {
     .check_id(id)
     response <- request(httr::GET, paste0('flight/', id, '/gcp'))
-    httr::stop_for_status(response)
+    .stop_for_status(response)
     response <- httr::content(response)
     response
 }
@@ -62,7 +62,7 @@ get_flight_gcp <- function(id) {
 get_flight_image <- function(id) {
     .check_id(id)
     response <- request(httr::GET, paste0('flight/', id, '/images'))
-    httr::stop_for_status(response)
+    .stop_for_status(response)
     response <- httr::content(response)
     response
 }
@@ -83,7 +83,7 @@ get_flight_image <- function(id) {
 get_flight_layer <- function(id, isMosaic = FALSE) {
     .check_id(id)
     response <- request(httr::GET, paste0('flight/', id, '/layers?isMosaic=', isMosaic))
-    httr::stop_for_status(response)
+    .stop_for_status(response)
     response <- httr::content(response)
     response
 }

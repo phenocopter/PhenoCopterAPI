@@ -3,7 +3,7 @@
 
 get_plot <- function(flight) {
     response <- request(httr::GET, paste0('flight/', flight, '/plots'))
-    httr::stop_for_status(response)
+    .stop_for_status(response)
     response <- httr::content(response)
     map_df(response, as_tibble) %>%
         arrange(column, row)
@@ -21,7 +21,7 @@ get_plot <- function(flight) {
 #' @examples
 get_plot_segmentation <- function(flight) {
     response <- request(httr::GET, paste0('flight/', flight, '/plot/segmentations'))
-    httr::stop_for_status(response)
+    .stop_for_status(response)
     response <- httr::content(response)
     response
 }
@@ -37,10 +37,8 @@ post_plot_segmentation_image <- function(flight, data) {
                         body = jsonlite::toJSON(data, auto_unbox = TRUE,
                                                 null = 'null'),
                         config = httr::content_type('application/json'))
+    .stop_for_status(response)
     r <- httr::content(response)
-    if (is.null(response$status_code) || !(response$status_code %in% c(200, 201))) {
-        stop(r)
-    }
     r
 }
 
@@ -51,10 +49,8 @@ delete_plot_segmentation_image <- function(flight) {
                         body = jsonlite::toJSON(data, auto_unbox = TRUE,
                                                 null = 'null'),
                         config = httr::content_type('application/json'))
+    .stop_for_status(response)
     r <- httr::content(response)
-    if (is.null(response$status_code) || !(response$status_code %in% c(200, 201))) {
-        stop(r)
-    }
     r
 }
 
@@ -76,7 +72,7 @@ get_plot_phenotypes <- function(flight, function_id = NULL) {
     }
     response <- request(httr::GET, paste0('flight/', flight, '/plot/phenotypes'),
                         query = query)
-    httr::stop_for_status(response)
+    .stop_for_status(response)
     response <- httr::content(response)
     response
 }
@@ -99,7 +95,7 @@ add_plot_phenotypes <- function(flight, fun, data) {
                         body = jsonlite::toJSON(data, auto_unbox = TRUE,
                                                 null = 'null'),
                         config = httr::content_type('application/json'))
-    httr::stop_for_status(response)
+    .stop_for_status(response)
     response <- httr::content(response)
     response
 }
@@ -121,7 +117,7 @@ delete_plot_phenotypes <- function(flight, function_id = NULL) {
     }
     response <- request(httr::DELETE, paste0('flight/', flight, '/plot/phenotypes'),
                         query = query)
-    httr::stop_for_status(response)
+    .stop_for_status(response)
     response <- httr::content(response)
     response
 }

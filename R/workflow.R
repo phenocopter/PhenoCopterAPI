@@ -26,7 +26,7 @@ get_flight_workflows <- function(workflowId = NULL, workflowName = "",
                                      workflowName = workflowName,
                                      statusId = statusId,
                                      statusName = statusName))
-    httr::stop_for_status(response)
+    .stop_for_status(response)
     response <- httr::content(response)
     response
 }
@@ -56,7 +56,7 @@ get_flight_workflow <- function(flight, workflow = NULL, fun = NULL) {
     }
 
     response <- request(httr::GET, url)
-    httr::stop_for_status(response)
+    .stop_for_status(response)
     response <- httr::content(response)
     response
 }
@@ -84,7 +84,34 @@ put_flight_workflow <- function(flight, id, workflow) {
                         body = jsonlite::toJSON(workflow, auto_unbox = TRUE,
                                                 null = 'null'),
                         config = httr::content_type('application/json'))
-    httr::stop_for_status(response)
+    .stop_for_status(response)
+    response <- httr::content(response)
+    response
+}
+
+
+
+#' PUT workflow for a flight
+#'
+#' @description
+#' PUT the workflow into system
+#' @param flight Flight id
+#' @param id id for flight workflow
+#' @param increment New progress
+#' @return The new workflow
+#' @export
+#' @examples
+#' \dontrun{
+#' pc_login()
+#' put_flight_workflow(flight = 1, id = 1, workflow = list(id = 1, workflowId = 1, statusId = 1))
+#' }
+put_flight_workflow_increment <- function(flight, id, increment) {
+
+    response <- request(httr::PUT, paste0('flight/', flight, '/workflow/', id, "/progress/increment/", increment),
+                        config = httr::content_type('application/json'))
+
+
+    .stop_for_status(response)
     response <- httr::content(response)
     response
 }
@@ -109,6 +136,8 @@ post_flight_log <- function(flight, workflow, data) {
                         body = jsonlite::toJSON(data, auto_unbox = TRUE,
                                                 null = 'null'),
                         config = httr::content_type('application/json'))
+    .stop_for_status(response)
+
     r <- httr::content(response)
     if (is.null(response$status_code) || !(response$status_code %in% c(200, 201))) {
         stop(r)
@@ -133,6 +162,8 @@ delete_flight_log <- function(flight, workflow, fun = NULL) {
     response <- request(httr::DELETE,
                         url,
                         config = httr::content_type('application/json'))
+    .stop_for_status(response)
+
     r <- httr::content(response)
     if (is.null(response$status_code) || !(response$status_code %in% c(200, 201))) {
         stop(r)

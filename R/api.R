@@ -63,3 +63,14 @@ request <- function(method,
     response <- method(url, query = query, ...)
     response
 }
+
+
+.stop_for_status <- function(x) {
+    if (httr::status_code(x) < 300) {
+        return(invisible(x))
+    }
+    sts <- httr::http_status(x)
+    msg <- paste0('Error at request "', x$url, '" with reason "',
+                  sts$reason, '" and message "', sts$message, '"')
+    stop(msg)
+}

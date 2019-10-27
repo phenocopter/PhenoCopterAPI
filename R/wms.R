@@ -10,7 +10,7 @@
 get_flight_wms <- function(flight) {
     .check_id(flight)
     response <- request(httr::GET, paste0('flight/', flight, '/wms'))
-    httr::stop_for_status(response)
+    .stop_for_status(response)
     response <- httr::content(response)
     response
 }
@@ -62,7 +62,7 @@ add_flight_wms <- function(flight, name, value, min = NULL, max = NULL, hide = T
                         body = jsonlite::toJSON(wms, auto_unbox = TRUE,
                                                 null = 'null'),
                         config = httr::content_type('application/json'))
-    httr::stop_for_status(response)
+    .stop_for_status(response)
     response <- httr::content(response)
     response
 }

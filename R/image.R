@@ -22,7 +22,7 @@ get_flight_image <- function(flight, image = NULL) {
         url <- paste0('flight/', flight, '/image/', image)
     }
     response <- request(httr::GET, url)
-    httr::stop_for_status(response)
+    .stop_for_status(response)
     response <- httr::content(response)
     response
 }
@@ -33,7 +33,7 @@ add_flight_image <- function(flight, data, overwrite = FALSE) {
     images <- get_flight_image(flight)
     if (length(images) > 0 & overwrite == FALSE) {
         warning('Image information already stored into database. The database is not overwrote.')
-		return;
+		return (NULL);
     }
     if (overwrite == TRUE) {
         stop("Not implemented overwrite = TRUE.")
@@ -83,7 +83,7 @@ add_flight_image <- function(flight, data, overwrite = FALSE) {
                             body = jsonlite::toJSON(new, auto_unbox = TRUE,
                                                     null = 'null', digits = 20),
                         config = httr::content_type('application/json'))
-    httr::stop_for_status(response)
+    .stop_for_status(response)
     response <- httr::content(response)
     response
 
@@ -92,7 +92,7 @@ add_flight_image <- function(flight, data, overwrite = FALSE) {
 delete_flight_image <- function(flight) {
     .check_id(flight)
     response <- request(httr::DELETE, paste0('flight/', flight, '/images'))
-    httr::stop_for_status(response)
+    .stop_for_status(response)
     response <- httr::content(response)
     response
 }
