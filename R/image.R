@@ -57,18 +57,17 @@ add_flight_image <- function(flight, data, overwrite = FALSE) {
     if (fid != flight) {
         stop('Flight ID is not matched')
     }
-
     # Generate files for each capture point in case of multiple band flight
     generate_file <- function(df) {
         res <- df %>%
-            select(flightId, latitude, longitude, elevation, width, height, datetimeOriginal) %>%
+            dplyr::select(flightId, latitude, longitude, elevation, width, height, datetimeOriginal) %>%
             slice(1)
         # Generate band if it is missing
         if (!has_name(df, 'band')) {
             df$band <- seq_len(nrow(df))
         }
         res$imageFile = list(df %>%
-                                 select(original, band))
+                                 dplyr::select(original, band))
         res
     }
     if (!has_name(data, 'enable')) {

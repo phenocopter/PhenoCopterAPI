@@ -80,6 +80,7 @@ get_flight_workflow <- function(flight, workflow = NULL, fun = NULL) {
 #' }
 put_flight_workflow <- function(flight, id, workflow) {
 
+    workflow$flightId <- flight
     response <- request(httr::PUT, paste0('flight/', flight, '/workflow/', id),
                         body = jsonlite::toJSON(workflow, auto_unbox = TRUE,
                                                 null = 'null'),
@@ -159,14 +160,9 @@ delete_flight_log <- function(flight, workflow, fun = NULL) {
     if (!is.null(fun)) {
         url <- paste0(url, '?fun=', fun)
     }
-    response <- request(httr::DELETE,
-                        url,
-                        config = httr::content_type('application/json'))
+    response <- request(httr::DELETE, url)
     .stop_for_status(response)
 
     r <- httr::content(response)
-    if (is.null(response$status_code) || !(response$status_code %in% c(200, 201))) {
-        stop(r)
-    }
     r
 }

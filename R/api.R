@@ -70,7 +70,6 @@ request <- function(method,
         return(invisible(x))
     }
     sts <- httr::http_status(x)
-    msg <- paste0('Error at request "', x$url, '" with reason "',
-                  sts$reason, '" and message "', sts$message, '"')
+    msg <- paste0('Error at request "', x$url, '" with message "', sts$message, '"')
     stop(msg)
 }

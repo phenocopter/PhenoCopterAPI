@@ -4,6 +4,28 @@
         stop('Provide the correct flight id.')
     }
 }
+
+#' Get a flight information
+#'
+#' @param id The flight id
+#'
+#' @return A list with flight information
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' pc_login()
+#' get_flight(1)
+#' }
+get_flights <- function() {
+    response <- request(httr::GET, 'flight')
+    .stop_for_status(response)
+    response <- httr::content(response)
+    response
+}
+
+
+
 #' Get a flight information
 #'
 #' @param id The flight id
