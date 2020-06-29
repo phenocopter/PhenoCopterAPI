@@ -81,6 +81,7 @@ get_flight_workflow <- function(flight, workflow = NULL, fun = NULL) {
 put_flight_workflow <- function(flight, id, workflow) {
 
     workflow$flightId <- flight
+    workflow$id <- id
     response <- request(httr::PUT, paste0('flight/', flight, '/workflow/', id),
                         body = jsonlite::toJSON(workflow, auto_unbox = TRUE,
                                                 null = 'null'),
